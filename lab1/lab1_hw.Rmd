@@ -1,7 +1,7 @@
 ---
 title: "Lab 1 Homework"
 author: "Tatiana Aguilar"
-date: "2023-01-10"
+date: "`r Sys.Date()`"
 output:
   html_document: 
     theme: spacelab
@@ -14,7 +14,7 @@ Answer the following questions and complete the exercises in RMarkdown. Please e
 Make sure to use the formatting conventions of RMarkdown to make your report neat and clean!  
 
 **1. Please complete the [class survey](https://forms.gle/8t9FZSBjgvFjzr4MA).**
-Completed
+
 
 **2. What is the difference between R and RStudio? What is GitHub and why is it useful to programmers?**  
 R is a scripting language, while RStudio is not the scripting language it is a GUI that interacts with R. GitHub is a online tool that helps you manage repositories. Github is useful to programmers as they can share and manage your repositories as well as view the different versions of your codes.
