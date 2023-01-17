@@ -111,7 +111,7 @@ mean(Jill_mean)
 
 10. Use the data matrix to perform one calculation or operation of your interest.
 
-The mean of all the hot spring temperatures collected
+The mean of all the hot spring temperatures collected.
 ```{r}
 mean(Hot_spring_matrix)
 ```

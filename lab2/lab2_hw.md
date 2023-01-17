@@ -1,7 +1,7 @@
 ---
 title: "Lab 2 Homework"
 author: "Tatiana Aguilar"
-date: "2023-01-15"
+date: "2023-01-17"
 output:
   html_document: 
     theme: spacelab
@@ -209,7 +209,7 @@ mean(Jill_mean)
 
 10. Use the data matrix to perform one calculation or operation of your interest.
 
-The mean of all the hot spring temperatures collected
+The mean of all the hot spring temperatures collected.
 
 ```r
 mean(Hot_spring_matrix)
