@@ -1,0 +1,44 @@
+---
+title: "Lab 4 Warmup"
+author: "Tatiana Aguilar"
+date: "2023-01-19"
+output: html_document
+---
+Go to tools, check for package updates regularly.
+
+### 1. Loading the tidyverse and palmerpenguins
+If it is already installed all you have to do is call your package by using library.
+```{r}
+library(tidyverse)
+```
+```{r}
+library(palmerpenguins)
+```
+
+### 2. Dimensions of the dataset penguins
+```{r}
+dim(penguins)
+glimpse(penguins)
+```
+
+### 3. Names of the variables in the penguins dataset
+```{r}
+names(penguins)
+```
+
+### 4. The number of individuals sampled on each island
+```{r}
+table(penguins$island) ##does not work that well with classes other than characters
+```
+
+### 5. Mean body mass for all individuals
+```{r}
+anyNA(penguins)
+```
+```{r}
+mean(penguins$body_mass_g, na.rm=T)
+```
+```{r}
+getwd()
+```
+
