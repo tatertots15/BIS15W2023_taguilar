@@ -1,0 +1,50 @@
+---
+title: "Cheatsheet R"
+author: "Tatiana Aguilar"
+date: "2023-01-22"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+### To check what directory you're currently in (your working directory).
+```{r}
+getwd() #Just run this you don't have to add anything to the parenthesis
+```
+
+### If you need to run an expression just type it in, remeber that order of operations apply.
+
+### '<-' is the symbol read as 'gets'
+
+### In order to make a vector (a string of values) you have to store it as an object.
+```{r}
+object<- c(1, 4, 7, 8)
+```
+
+### To calculate mean
+```{r}
+mean(object)
+```
+
+### To calculate median
+```{r}
+median()
+```
+
+### To calculate standard deviation
+```{r}
+sd(object)
+```
+
+### If you need help with a command, typs ? in front of the command of interest.
+```{r}
+?sd
+```
+
+### To print an object just type the object's name
+```{r}
+object
+```
+
