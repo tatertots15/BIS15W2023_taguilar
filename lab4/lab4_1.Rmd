@@ -67,12 +67,7 @@ We are only interested in lakeid and scalelength.
 select(fish, "lakeid", "scalelength")
 ```
 ```{r}
-select(fish, "lakeid", "annnumber"
-       
-       
-       
-       
-       )
+select(fish, "lakeid", "annnumber")
 ```
 
 
