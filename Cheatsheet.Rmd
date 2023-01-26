@@ -48,3 +48,11 @@ sd(object)
 object
 ```
 
+### Operators
+Less than <, Greater than >, Less than or equal to <=, Greater than or equal to >=, equal to ==.
+
+### To get values and not the logical evaluation of the entire vector.
+```{r}
+object[object >= 7]
+```
+
