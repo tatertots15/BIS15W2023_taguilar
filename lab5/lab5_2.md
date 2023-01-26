@@ -1,6 +1,6 @@
 ---
 title: "dplyr Superhero"
-date: "2023-01-24"
+date: "2023-01-25"
 output:
   html_document: 
     theme: spacelab
@@ -410,13 +410,13 @@ tabyl(good_guys, race)
 ##      God / Eternal   6 0.012096774   0.021505376
 ##             Gungan   1 0.002016129   0.003584229
 ##              Human 148 0.298387097   0.530465950
-##    Human / Altered   2 0.004032258   0.007168459
-##     Human / Cosmic   2 0.004032258   0.007168459
-##  Human / Radiation   8 0.016129032   0.028673835
 ##         Human-Kree   2 0.004032258   0.007168459
 ##      Human-Spartoi   1 0.002016129   0.003584229
 ##       Human-Vulcan   1 0.002016129   0.003584229
 ##    Human-Vuldarian   1 0.002016129   0.003584229
+##    Human / Altered   2 0.004032258   0.007168459
+##     Human / Cosmic   2 0.004032258   0.007168459
+##  Human / Radiation   8 0.016129032   0.028673835
 ##      Icthyo Sapien   1 0.002016129   0.003584229
 ##            Inhuman   4 0.008064516   0.014336918
 ##    Kakarantharaian   1 0.002016129   0.003584229
@@ -500,16 +500,104 @@ bald_good
 
 10. Let's explore who the really "big" superheros are. In the `superhero_info` data, which have a height over 200 or weight greater than or equal to 450?
 
+```r
+superhero_info %>% 
+  select(name, height, weight) %>% 
+  filter(height>300 | weight>= 450)
+```
+
+```
+## # A tibble: 14 × 3
+##    name          height weight
+##    <chr>          <dbl>  <dbl>
+##  1 Bloodaxe       218      495
+##  2 Darkseid       267      817
+##  3 Fin Fang Foom  975       18
+##  4 Galactus       876       16
+##  5 Giganta         62.5    630
+##  6 Groot          701        4
+##  7 Hulk           244      630
+##  8 Juggernaut     287      855
+##  9 MODOK          366      338
+## 10 Onslaught      305      405
+## 11 Red Hulk       213      630
+## 12 Sasquatch      305      900
+## 13 Wolfsbane      366      473
+## 14 Ymir           305.      NA
+```
 
 11. Just to be clear on the `|` operator,  have a look at the superheros over 300 in height...
 
+```r
+superhero_info %>% 
+  select(name, height) %>% 
+  filter(height>300)
+```
+
+```
+## # A tibble: 8 × 2
+##   name          height
+##   <chr>          <dbl>
+## 1 Fin Fang Foom   975 
+## 2 Galactus        876 
+## 3 Groot           701 
+## 4 MODOK           366 
+## 5 Onslaught       305 
+## 6 Sasquatch       305 
+## 7 Wolfsbane       366 
+## 8 Ymir            305.
+```
 
 12. ...and the superheros over 450 in weight. Bonus question! Why do we not have 16 rows in question #10?
 
+```r
+superhero_info %>% 
+  select(name, weight) %>% 
+  filter(weight>450)
+```
+
+```
+## # A tibble: 8 × 2
+##   name       weight
+##   <chr>       <dbl>
+## 1 Bloodaxe      495
+## 2 Darkseid      817
+## 3 Giganta       630
+## 4 Hulk          630
+## 5 Juggernaut    855
+## 6 Red Hulk      630
+## 7 Sasquatch     900
+## 8 Wolfsbane     473
+```
+
+We do not have 16 rows in question because we have two superheros that match both characteristics and they are only included on the list once.
 
 ## Height to Weight Ratio
 13. It's easy to be strong when you are heavy and tall, but who is heavy and short? Which superheros have the highest height to weight ratio?
 
+```r
+superhero_info %>% 
+  mutate(height_weight_ratio=height/weight)
+```
+
+```
+## # A tibble: 734 × 11
+##    name       gender eye_c…¹ race  hair_…² height publi…³ skin_…⁴ align…⁵ weight
+##    <chr>      <chr>  <chr>   <chr> <chr>    <dbl> <chr>   <chr>   <chr>    <dbl>
+##  1 A-Bomb     Male   yellow  Human No Hair    203 Marvel… <NA>    good       441
+##  2 Abe Sapien Male   blue    Icth… No Hair    191 Dark H… blue    good        65
+##  3 Abin Sur   Male   blue    Unga… No Hair    185 DC Com… red     good        90
+##  4 Abominati… Male   green   Huma… No Hair    203 Marvel… <NA>    bad        441
+##  5 Abraxas    Male   blue    Cosm… Black       NA Marvel… <NA>    bad         NA
+##  6 Absorbing… Male   blue    Human No Hair    193 Marvel… <NA>    bad        122
+##  7 Adam Monr… Male   blue    <NA>  Blond       NA NBC - … <NA>    good        NA
+##  8 Adam Stra… Male   blue    Human Blond      185 DC Com… <NA>    good        88
+##  9 Agent 13   Female blue    <NA>  Blond      173 Marvel… <NA>    good        61
+## 10 Agent Bob  Male   brown   Human Brown      178 Marvel… <NA>    good        81
+## # … with 724 more rows, 1 more variable: height_weight_ratio <dbl>, and
+## #   abbreviated variable names ¹​eye_color, ²​hair_color, ³​publisher,
+## #   ⁴​skin_color, ⁵​alignment
+```
 
 ## `superhero_powers`
 Have a quick look at the `superhero_powers` data frame.  
@@ -693,10 +781,72 @@ glimpse(superhero_powers)
 
 14. How many superheros have a combination of accelerated healing, durability, and super strength?
 
+```r
+superhero_powers %>% 
+  filter(durability & super_strength & accelerated_healing) %>% 
+  arrange(hero_names)
+```
+
+```
+## # A tibble: 97 × 168
+##    hero_names   agility accele…¹ lante…² dimen…³ cold_…⁴ durab…⁵ stealth energ…⁶
+##    <chr>        <lgl>   <lgl>    <lgl>   <lgl>   <lgl>   <lgl>   <lgl>   <lgl>  
+##  1 A-Bomb       FALSE   TRUE     FALSE   FALSE   FALSE   TRUE    FALSE   FALSE  
+##  2 Abe Sapien   TRUE    TRUE     FALSE   FALSE   TRUE    TRUE    FALSE   FALSE  
+##  3 Angel        TRUE    TRUE     FALSE   FALSE   FALSE   TRUE    TRUE    FALSE  
+##  4 Anti-Monitor FALSE   TRUE     FALSE   TRUE    FALSE   TRUE    FALSE   TRUE   
+##  5 Anti-Venom   FALSE   TRUE     FALSE   FALSE   FALSE   TRUE    FALSE   FALSE  
+##  6 Aquaman      TRUE    TRUE     FALSE   FALSE   TRUE    TRUE    TRUE    FALSE  
+##  7 Arachne      TRUE    TRUE     FALSE   FALSE   FALSE   TRUE    FALSE   FALSE  
+##  8 Archangel    TRUE    TRUE     FALSE   FALSE   FALSE   TRUE    FALSE   FALSE  
+##  9 Ardina       TRUE    TRUE     FALSE   FALSE   TRUE    TRUE    FALSE   FALSE  
+## 10 Ares         TRUE    TRUE     FALSE   FALSE   FALSE   TRUE    FALSE   FALSE  
+## # … with 87 more rows, 159 more variables: flight <lgl>, danger_sense <lgl>,
+## #   underwater_breathing <lgl>, marksmanship <lgl>, weapons_master <lgl>,
+## #   power_augmentation <lgl>, animal_attributes <lgl>, longevity <lgl>,
+## #   intelligence <lgl>, super_strength <lgl>, cryokinesis <lgl>,
+## #   telepathy <lgl>, energy_armor <lgl>, energy_blasts <lgl>,
+## #   duplication <lgl>, size_changing <lgl>, density_control <lgl>,
+## #   stamina <lgl>, astral_travel <lgl>, audio_control <lgl>, dexterity <lgl>, …
+```
+97 superheros have a combination of accelerated healing, durability, and super strength.
+
+```r
+dim(superhero_powers)
+```
+
+```
+## [1] 667 168
+```
 
 ## Your Favorite
 15. Pick your favorite superhero and let's see their powers!
 
+```r
+superhero_powers %>% 
+  filter(hero_names=="Batman") %>% 
+  select_if(all_vars(.=="TRUE"))
+```
+
+```
+## Warning: The `.predicate` argument of `select_if()` can't contain quosures. as of dplyr
+## 0.8.3.
+## ℹ Please use a one-sided formula, a function, or a function name.
+## ℹ The deprecated feature was likely used in the base package.
+##   Please report the issue to the authors.
+```
+
+```
+## # A tibble: 1 × 17
+##   agility durability stealth underwate…¹ marks…² weapo…³ intel…⁴ super…⁵ stamina
+##   <lgl>   <lgl>      <lgl>   <lgl>       <lgl>   <lgl>   <lgl>   <lgl>   <lgl>  
+## 1 TRUE    TRUE       TRUE    TRUE        TRUE    TRUE    TRUE    TRUE    TRUE   
+## # … with 8 more variables: super_speed <lgl>, weapon_based_powers <lgl>,
+## #   peak_human_condition <lgl>, reflexes <lgl>, gliding <lgl>,
+## #   power_suit <lgl>, vision_night <lgl>, vision_infrared <lgl>, and
+## #   abbreviated variable names ¹​underwater_breathing, ²​marksmanship,
+## #   ³​weapons_master, ⁴​intelligence, ⁵​super_strength
+```
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.  

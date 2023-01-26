@@ -127,23 +127,33 @@ bald_good
 
 10. Let's explore who the really "big" superheros are. In the `superhero_info` data, which have a height over 200 or weight greater than or equal to 450?
 ```{r}
-
+superhero_info %>% 
+  select(name, height, weight) %>% 
+  filter(height>300 | weight>= 450)
+  
 ```
 
 11. Just to be clear on the `|` operator,  have a look at the superheros over 300 in height...
 ```{r}
-
+superhero_info %>% 
+  select(name, height) %>% 
+  filter(height>300)
 ```
 
 12. ...and the superheros over 450 in weight. Bonus question! Why do we not have 16 rows in question #10?
 ```{r}
-
+superhero_info %>% 
+  select(name, weight) %>% 
+  filter(weight>450)
 ```
+
+We do not have 16 rows in question because we have two superheros that match both characteristics and they are only included on the list once.
 
 ## Height to Weight Ratio
 13. It's easy to be strong when you are heavy and tall, but who is heavy and short? Which superheros have the highest height to weight ratio?
 ```{r}
-
+superhero_info %>% 
+  mutate(height_weight_ratio=height/weight)
 ```
 
 ## `superhero_powers`
@@ -154,13 +164,21 @@ glimpse(superhero_powers)
 
 14. How many superheros have a combination of accelerated healing, durability, and super strength?
 ```{r}
-
+superhero_powers %>% 
+  filter(durability & super_strength & accelerated_healing) %>% 
+  arrange(hero_names)
+```
+97 superheros have a combination of accelerated healing, durability, and super strength.
+```{r}
+dim(superhero_powers)
 ```
 
 ## Your Favorite
 15. Pick your favorite superhero and let's see their powers!
 ```{r}
-
+superhero_powers %>% 
+  filter(hero_names=="Batman") %>% 
+  select_if(all_vars(.=="TRUE"))
 ```
 
 ## Push your final code to GitHub!
