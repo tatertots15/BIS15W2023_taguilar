@@ -56,3 +56,18 @@ Less than <, Greater than >, Less than or equal to <=, Greater than or equal to 
 object[object >= 7]
 ```
 
+### To find out what class your data is out of the five most frequently used ones (numeric, interger, character, logical, complex).
+```{r}
+class(object)
+```
+
+### In order to clarify or specify a type of data.
+```{r}
+is.integer(object) #is object an integer?
+```
+
+```{r}
+my_integer <- 
+  as.integer(object) #create a new object specified as an integer
+```
+
