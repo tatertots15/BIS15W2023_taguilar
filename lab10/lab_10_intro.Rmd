@@ -1,0 +1,44 @@
+---
+title: "Lab 10 Intro"
+date: "`r Sys.Date()`"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library("jpeg")
+```
+```{r}
+library("tidyverse")
+library("janitor")
+```
+```{r}
+?min
+```
+
+## Seating & Set-up
+1. Please make sure that you sit next to your group members for the rest of the quarter.
+2. Please set-up your computer as normal.
+
+## Warm-up
+1. Please load the homerange data `Tamburelloetal_HomeRangeDatabase.csv`
+```{r}
+homerange <- readr::read_csv("data/Tamburelloetal_HomeRangeDatabase.csv")
+```
+
+2. Show the min, mean, and max log10.mass by taxonomic class in the dataset.
+```{r}
+homerange %>% 
+  group_by(class) %>% 
+  summarize(mean_log.10_mass=mean(log10.mass, na.rm = T),
+            min_log.10_mass=min(log10.mass, na.rm = T),
+            max_log.10_mass=max(log10.mass, na.em = T))
+```
+
+3. Make a plot that best summarizes this output.
+```{r}
+homerange %>% 
+  ggplot(aes(x=class, y=log10.mass)) +
+  geom_boxplot(na.rm = T) #boxplot show a range of values, black line is the median. Dots are outliers.
+```
+
