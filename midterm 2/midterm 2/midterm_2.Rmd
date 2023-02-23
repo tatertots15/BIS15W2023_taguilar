@@ -22,6 +22,7 @@ Please load the following libraries.
 library("tidyverse")
 library("janitor")
 library("naniar")
+library(gapminder)
 ```
 
 ```{r}
@@ -146,17 +147,52 @@ surgery%>%
 
 9. (4 points) When is the best month to have surgery? Make a chart that shows the 30-day mortality and complications for the patients by month. `mort30` is the variable that shows whether or not a patient survived 30 days post-operation.
 ```{r}
-#surgery %>% group_by(month) %>% summarise(mean_ccsmort30rate=mean(ccsmort30rate),mean_ccscomplicationrate=mean(ccscomplicationrate))
+surgery_modified <- surgery %>%
+      mutate(new_mort30 = ifelse(mort30 == "No",0,1))
+```
+
+```{r}
+surgery_modified %>% 
+  group_by(month) %>% 
+  count(new_mort30, sort = T)
+```
+```{r}
+surgery_modified %>% 
+  group_by(month) %>% 
+  summarise(mean_ccsmort30rate=mean(ccsmort30rate),
+            mean_ccscomplicationrate=mean(ccscomplicationrate))
 ```
 
 10. (4 points) Make a plot that visualizes the chart from question #9. Make sure that the months are on the x-axis. Do a search online and figure out how to order the months Jan-Dec.
 ```{r}
-surgery %>% 
-  mutate(Month = factor(month, levels = month.abb)) %>% 
-  arrange(Month)
+new_surgery<-surgery_modified %>% 
+  mutate(new_month = factor(month, levels = month.abb)) %>% 
+  arrange(new_month)
+```
+
+```{r}
+new_surgery %>% 
+  ggplot(aes(x=new_month, y=new_mort30)) +
+  geom_col() +
+  labs(title = "Mortality Rate 30 Days Post OP",
+       x="Month",
+       y="Mortality")
 ```
 ```{r}
-#surgery %>% mutate(mort30day =
+new_surgery %>% 
+  ggplot(aes(x=new_month, y=ccsmort30rate)) + 
+  geom_col() +
+  labs(title = "Mortality Rate 30 Days in Hospital",
+       x="Month",
+       y="Mortality")
+```
+```{r}
+new_surgery %>% 
+  ggplot(aes(x=new_month, y=ccscomplicationrate)) +
+  geom_col() +
+  labs(title = "Complication Rate 30 Days Post OP",
+       x="Month",
+       y="Complication")
 ```
 
 Please provide the names of the students you have worked with with during the exam:

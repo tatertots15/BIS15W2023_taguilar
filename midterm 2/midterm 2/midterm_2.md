@@ -21,6 +21,7 @@ Please load the following libraries.
 library("tidyverse")
 library("janitor")
 library("naniar")
+library(gapminder)
 ```
 
 
@@ -263,43 +264,101 @@ surgery%>%
 9. (4 points) When is the best month to have surgery? Make a chart that shows the 30-day mortality and complications for the patients by month. `mort30` is the variable that shows whether or not a patient survived 30 days post-operation.
 
 ```r
-#surgery %>% group_by(month) %>% summarise(mean_ccsmort30rate=mean(ccsmort30rate),mean_ccscomplicationrate=mean(ccscomplicationrate))
+surgery_modified <- surgery %>%
+      mutate(new_mort30 = ifelse(mort30 == "No",0,1))
+```
+
+
+```r
+surgery_modified %>% 
+  group_by(month) %>% 
+  count(new_mort30, sort = T)
+```
+
+```
+## # A tibble: 24 × 3
+## # Groups:   month [12]
+##    month new_mort30     n
+##    <chr>      <dbl> <int>
+##  1 Sep            0  3192
+##  2 Aug            0  3168
+##  3 Jun            0  2980
+##  4 Apr            0  2686
+##  5 Mar            0  2685
+##  6 Oct            0  2681
+##  7 Jan            0  2651
+##  8 May            0  2644
+##  9 Nov            0  2539
+## 10 Feb            0  2489
+## # … with 14 more rows
+```
+
+```r
+surgery_modified %>% 
+  group_by(month) %>% 
+  summarise(mean_ccsmort30rate=mean(ccsmort30rate),
+            mean_ccscomplicationrate=mean(ccscomplicationrate))
+```
+
+```
+## # A tibble: 12 × 3
+##    month mean_ccsmort30rate mean_ccscomplicationrate
+##    <chr>              <dbl>                    <dbl>
+##  1 Apr              0.00430                    0.131
+##  2 Aug              0.00443                    0.136
+##  3 Dec              0.00418                    0.133
+##  4 Feb              0.00427                    0.134
+##  5 Jan              0.00429                    0.134
+##  6 Jul              0.00432                    0.134
+##  7 Jun              0.00435                    0.132
+##  8 Mar              0.00421                    0.131
+##  9 May              0.00436                    0.132
+## 10 Nov              0.00433                    0.134
+## 11 Oct              0.00430                    0.133
+## 12 Sep              0.00435                    0.135
 ```
 
 10. (4 points) Make a plot that visualizes the chart from question #9. Make sure that the months are on the x-axis. Do a search online and figure out how to order the months Jan-Dec.
 
 ```r
-surgery %>% 
-  mutate(Month = factor(month, levels = month.abb)) %>% 
-  arrange(Month)
+new_surgery<-surgery_modified %>% 
+  mutate(new_month = factor(month, levels = month.abb)) %>% 
+  arrange(new_month)
 ```
 
-```
-## # A tibble: 32,001 × 26
-##    ahrq_ccs   age gender race      asa_s…¹   bmi basel…² basel…³ basel…⁴ basel…⁵
-##    <chr>    <dbl> <chr>  <chr>     <chr>   <dbl> <chr>   <chr>   <chr>   <chr>  
-##  1 <Other>   49.4 M      Caucasian III      41.3 No      Yes     No      Yes    
-##  2 <Other>   70.5 F      Caucasian III      50.5 No      Yes     No      No     
-##  3 <Other>   74.8 M      Caucasian IV-VI    35.4 Yes     Yes     No      No     
-##  4 <Other>   63   F      Caucasian III      22.5 Yes     No      No      No     
-##  5 <Other>   57.1 M      Caucasian III      26.1 No      Yes     No      No     
-##  6 <Other>   48.7 M      Caucasian IV-VI    29.4 Yes     No      No      No     
-##  7 <Other>   61.9 M      <NA>      IV-VI    NA   Yes     No      No      No     
-##  8 <Other>   77.8 F      Caucasian III      NA   Yes     Yes     No      No     
-##  9 <Other>   55.6 M      <NA>      III      21.3 No      No      No      No     
-## 10 <Other>   57   M      <NA>      III      NA   Yes     Yes     No      No     
-## # … with 31,991 more rows, 16 more variables: baseline_digestive <chr>,
-## #   baseline_osteoart <chr>, baseline_psych <chr>, baseline_pulmonary <chr>,
-## #   baseline_charlson <dbl>, mortality_rsi <dbl>, complication_rsi <dbl>,
-## #   ccsmort30rate <dbl>, ccscomplicationrate <dbl>, hour <dbl>, dow <chr>,
-## #   month <chr>, moonphase <chr>, mort30 <chr>, complication <chr>,
-## #   Month <fct>, and abbreviated variable names ¹​asa_status, ²​baseline_cancer,
-## #   ³​baseline_cvd, ⁴​baseline_dementia, ⁵​baseline_diabetes
-```
 
 ```r
-#surgery %>% mutate(mort30day =
+new_surgery %>% 
+  ggplot(aes(x=new_month, y=new_mort30)) +
+  geom_col() +
+  labs(title = "Mortality Rate 30 Days Post OP",
+       x="Month",
+       y="Mortality")
 ```
+
+![](midterm_2_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+
+```r
+new_surgery %>% 
+  ggplot(aes(x=new_month, y=ccsmort30rate)) + 
+  geom_col() +
+  labs(title = "Mortality Rate 30 Days in Hospital",
+       x="Month",
+       y="Mortality")
+```
+
+![](midterm_2_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+
+```r
+new_surgery %>% 
+  ggplot(aes(x=new_month, y=ccscomplicationrate)) +
+  geom_col() +
+  labs(title = "Complication Rate 30 Days Post OP",
+       x="Month",
+       y="Complication")
+```
+
+![](midterm_2_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 Please provide the names of the students you have worked with with during the exam:
 
