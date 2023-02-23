@@ -208,31 +208,98 @@ The variable `ccsmort30rate` is a measure of the overall 30-day mortality rate a
 
 ```r
 highest_risk_mortality <- surgery%>% 
-  select(ahrq_ccs, ccsmort30rate) %>% 
-  arrange(desc(ccsmort30rate)) %>% 
+  group_by(ahrq_ccs) %>% 
+  summarise(mortality_risk=mean(ccsmort30rate)) %>% 
+  arrange(desc(mortality_risk)) %>% 
   slice_head(n=5)
 highest_risk_mortality
 ```
 
 ```
 ## # A tibble: 5 × 2
-##   ahrq_ccs             ccsmort30rate
-##   <chr>                        <dbl>
-## 1 Colorectal resection        0.0167
-## 2 Colorectal resection        0.0167
-## 3 Colorectal resection        0.0167
-## 4 Colorectal resection        0.0167
-## 5 Colorectal resection        0.0167
+##   ahrq_ccs                                             mortality_risk
+##   <chr>                                                         <dbl>
+## 1 Colorectal resection                                        0.0167 
+## 2 Small bowel resection                                       0.0129 
+## 3 Gastrectomy; partial and total                              0.0127 
+## 4 Endoscopy and endoscopic biopsy of the urinary tract        0.00811
+## 5 Spinal fusion                                               0.00742
+```
+
+```r
+highest_risk_complication <- surgery%>% 
+  group_by(ahrq_ccs) %>% 
+  summarise(complication_risk=mean(ccscomplicationrate)) %>% 
+  arrange(desc(complication_risk)) %>% 
+  slice_head(n=5)
+highest_risk_complication
+```
+
+```
+## # A tibble: 5 × 2
+##   ahrq_ccs                         complication_risk
+##   <chr>                                        <dbl>
+## 1 Small bowel resection                        0.466
+## 2 Colorectal resection                         0.312
+## 3 Nephrectomy; partial or complete             0.197
+## 4 Gastrectomy; partial and total               0.190
+## 5 Spinal fusion                                0.183
 ```
 
 8. (3 points) Make a plot that compares the `ccsmort30rate` for all listed `ahrq_ccs` procedures.
 
+```r
+surgery%>% 
+  group_by(ahrq_ccs) %>% 
+  ggplot(aes(x=ccsmort30rate, y=ahrq_ccs)) +
+  geom_boxplot() +
+  labs(title="Mortality Rates by Procedure",
+       x="Mortality Rate",
+       y="Procedure")
+```
+
+![](midterm_2_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 9. (4 points) When is the best month to have surgery? Make a chart that shows the 30-day mortality and complications for the patients by month. `mort30` is the variable that shows whether or not a patient survived 30 days post-operation.
 
+```r
+#surgery %>% group_by(month) %>% summarise(mean_ccsmort30rate=mean(ccsmort30rate),mean_ccscomplicationrate=mean(ccscomplicationrate))
+```
 
 10. (4 points) Make a plot that visualizes the chart from question #9. Make sure that the months are on the x-axis. Do a search online and figure out how to order the months Jan-Dec.
 
+```r
+surgery %>% 
+  mutate(Month = factor(month, levels = month.abb)) %>% 
+  arrange(Month)
+```
+
+```
+## # A tibble: 32,001 × 26
+##    ahrq_ccs   age gender race      asa_s…¹   bmi basel…² basel…³ basel…⁴ basel…⁵
+##    <chr>    <dbl> <chr>  <chr>     <chr>   <dbl> <chr>   <chr>   <chr>   <chr>  
+##  1 <Other>   49.4 M      Caucasian III      41.3 No      Yes     No      Yes    
+##  2 <Other>   70.5 F      Caucasian III      50.5 No      Yes     No      No     
+##  3 <Other>   74.8 M      Caucasian IV-VI    35.4 Yes     Yes     No      No     
+##  4 <Other>   63   F      Caucasian III      22.5 Yes     No      No      No     
+##  5 <Other>   57.1 M      Caucasian III      26.1 No      Yes     No      No     
+##  6 <Other>   48.7 M      Caucasian IV-VI    29.4 Yes     No      No      No     
+##  7 <Other>   61.9 M      <NA>      IV-VI    NA   Yes     No      No      No     
+##  8 <Other>   77.8 F      Caucasian III      NA   Yes     Yes     No      No     
+##  9 <Other>   55.6 M      <NA>      III      21.3 No      No      No      No     
+## 10 <Other>   57   M      <NA>      III      NA   Yes     Yes     No      No     
+## # … with 31,991 more rows, 16 more variables: baseline_digestive <chr>,
+## #   baseline_osteoart <chr>, baseline_psych <chr>, baseline_pulmonary <chr>,
+## #   baseline_charlson <dbl>, mortality_rsi <dbl>, complication_rsi <dbl>,
+## #   ccsmort30rate <dbl>, ccscomplicationrate <dbl>, hour <dbl>, dow <chr>,
+## #   month <chr>, moonphase <chr>, mort30 <chr>, complication <chr>,
+## #   Month <fct>, and abbreviated variable names ¹​asa_status, ²​baseline_cancer,
+## #   ³​baseline_cvd, ⁴​baseline_dementia, ⁵​baseline_diabetes
+```
+
+```r
+#surgery %>% mutate(mort30day =
+```
 
 Please provide the names of the students you have worked with with during the exam:
 
