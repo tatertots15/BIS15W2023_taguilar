@@ -198,7 +198,11 @@ shinyApp(ui, server)
 ```
 
 ## Packages for next time  
-Please install shinydashboard below for part 2!  
+Please install shinydashboard below for part 2!
+```{r}
+library(shinydashboard)
+```
+
 ```{r}
 #install.packages("shinydashboard")
 ```
